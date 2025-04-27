@@ -29,6 +29,7 @@ Send Responses:
     Set Status Code: ctx.status(200) or ctx.status(400)
  */
 
+/** Contains Javalin logic, with path endpoints and handler logic */
 public class SocialMediaController {
 
     AccountService accountService;
@@ -106,8 +107,8 @@ public class SocialMediaController {
      * and posted_by is a real existing user.
      * @param ctx contain a JSON representation of a message, not containing message_id
      * @throws JsonProcessingException
-     * successful : the created Message object as JSON including its message_id.
-     * unsuccess : status 400 
+     * @return successful : the created Message object as JSON including its message_id.
+     * @return unsuccess : status 400 
      */
     private void createMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper  = new ObjectMapper();
@@ -126,8 +127,8 @@ public class SocialMediaController {
     /**
      * Purpose: get all messages.
      * @param ctx No info in the request.
-     * successful : a list containing Message objects
-     * unsuccess : empty list 
+     * @return successful : a list containing Message objects
+     * @return unsuccess : empty list 
      */
     private void getAllMessagesHandler(Context ctx) {
         List<Message> messages = messageService.getAllMessages();
@@ -137,8 +138,8 @@ public class SocialMediaController {
     /**
      * Purpose: get a single message by its id
      * @param ctx contains a URI parameter for message_id
-     * successful : the Message object
-     * unsuccess : empty response body
+     * @return successful : the Message object
+     * @return unsuccess : empty response body
      */
     private void getMessageByIdHandler(Context ctx) {
         // Retrieve the message_id from the path parameter
@@ -159,8 +160,8 @@ public class SocialMediaController {
     /**
      * Purpose: delete a single message by its id
      * @param ctx contains a URI parameter for message_id
-     * successful : message existed and was deleted from db, response contains the deleted message
-     * unsuccess : message did not exist, empty response body, status 200
+     * @return successful : message existed and was deleted from db, response contains the deleted message
+     * @return unsuccess : message did not exist, empty response body, status 200
      */
     private void deleteMessageByIdHandler(Context ctx) {
         int messageId = Integer.parseInt(ctx.pathParam("message_id"));
@@ -176,8 +177,8 @@ public class SocialMediaController {
     /**
      * Purpose: update a single message by its id with new message_text
      * @param ctx contains a URI parameter for message_id, body contains a new message_text
-     * successful : response body of the updated Message object including message_id, message_text, posted_by, and time_posted_epoch
-     * unsuccess : status 400
+     * @return successful : response body of the updated Message object including message_id, message_text, posted_by, and time_posted_epoch
+     * @return unsuccess : status 400
      */
     private void updateMessageByIdHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -196,8 +197,8 @@ public class SocialMediaController {
     /**
      * Purpose: get a complete list of all messages from a single user by their account_id
      * @param ctx contains a URI parameter for account_id
-     * successful : list of Message objects
-     * unsuccess : empty list, status 200
+     * @return successful : list of Message objects
+     * @return unsuccess : empty list, status 200
      */
     private void getAllMessagesByAccountIdHandler(Context ctx) {
         int accountId = Integer.parseInt(ctx.pathParam("account_id"));
