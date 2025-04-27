@@ -29,7 +29,12 @@ public class MessageDAO {
          System.out.println(e.getMessage()); // this should get changed to a log file for production
     }
 */ 
-    /** create a new message in the message table. newMessage fields: posted_by (int), message_text (String 255), time_posted_epoch (long). */
+    /** create a new message in the message table. 
+     * fields of message table: posted_by (int), message_text (String 255), time_posted_epoch (long).
+     * @param newMessage contains a Message object with posted_by, message_text, and time_posted_epoch.  
+     * @return if successful, Message object with created message_id.
+     * @return if unsuccessful, null.
+     * */
     public Message createMessage(Message newMessage) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -65,7 +70,11 @@ public class MessageDAO {
         return null;
     }
 
-    /** determines if a user exists when they try and create a new message (createMessage) */
+    /** determines if a user exists.
+     * @param postedBy is a field of a Message object, of who created the message.
+     * @return if successful, user exists, return true.
+     * @return if unsuccessful, return false.
+     */
     public boolean postedByExistingUser(int postedBy) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -94,7 +103,9 @@ public class MessageDAO {
         return false;
     }
 
-    /** returns a list of all messages, it is expected for the list to simply be empty if there are no messages */
+    /** Get all messages. 
+     * @return list of all messages or an empty list if there are no messages.
+    */
     public List<Message> getAllMessages() {
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
@@ -131,6 +142,12 @@ public class MessageDAO {
         return messages;
     }
     
+    /**
+     * Get a message by message_id.
+     * @param id is the id of a specific message.
+     * @return if successful, return a Message object with message_id, posted_by, message_text, and time_posted_epoch.
+     * @return if unsuccessful, return null.
+     */
     public Message getMessageById(int id) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -146,7 +163,7 @@ public class MessageDAO {
                     rs.getInt("message_id"),
                     rs.getInt("posted_by"),
                     rs.getString("message_text"),
-                    rs.getLong("time_posted_epoch")
+                    rs.getLong("time_posted_epoch") 
                 );
             }
         } catch (SQLException e) {
@@ -165,9 +182,10 @@ public class MessageDAO {
     }
 
     /** 
-     * Deletion of an existing message should remove an existing message from the database. 
-     * If the message existed, the response body should contain the now-deleted message.
-     * If the message did not exist, the response body should be empty.
+     * Deletes an existing message from the message table db. 
+     * @param id this is the message_id of the specific message to be deleted.
+     * @return if successful, return the now-deleted Message object.
+     * @return if unsuccessful, null.
      */
     public Message deleteMessageById(int id) {
         Connection connection = ConnectionUtil.getConnection();
@@ -197,7 +215,12 @@ public class MessageDAO {
         return null;
     }
 
-    /**  */
+    /** 
+     * Update an existing message in the message table.
+     * @param newMessage, contains a Message object with updated message_text.
+     * @return if successful, return a new Message object with the updated message_text.
+     * @return if unsuccessful, null.
+     */
     public Message updateMessageById(Message newMessage) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -230,7 +253,7 @@ public class MessageDAO {
     /** 
      * Retrieves all messages posted by a specific user from the message table.
      * @param postedBy foreign key to account.account_id 
-     * @return a list containing all messages posted by a particular user, or empty if no messages exist for that user
+     * @return a list containing all messages posted by a particular user, or an empty list if no messages exist for that user
      */
     public List<Message> getAllMessagesByAccountId(int postedBy) {
         Connection connection = ConnectionUtil.getConnection();

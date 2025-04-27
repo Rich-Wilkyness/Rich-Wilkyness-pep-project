@@ -29,8 +29,11 @@ public class AccountService {
     // --------------------------------------------------------------------------------------------------
     // SERVICES
 
-    // verify, username not blank, password 4 characters long, username not already taken - return Account object if successful and status 200, else return status 400 
-    // - getAccountByUsername : needed to check if username is already taken
+    /** 
+     * verifies, username not blank, password 4 characters long, username not already taken.
+     * @return if successful, Account object.
+     * @return if unsuccessful, null.
+     */
     public Account createAccount(Account newAccount) {
         // check username not blank || password is at least 4 characters long 
         if (newAccount == null || newAccount.username == null || newAccount.username.isEmpty() || newAccount.password.length() < 4) 
@@ -48,12 +51,19 @@ public class AccountService {
         return account;
     }
 
-    // used to check if username exists when createAccount is called
+    /** Checks if username exists. 
+     * @param username the Account object username to be checked.
+     * @return true if exists, else false.
+    */
     public boolean getAccountByUsername(String username) {
         return accountDAO.getAccountByUsername(username);
     }
 
-    // verify, username and password match an existing account - return Account object if successful and status 200, else return status 401
+    /** Login. Checks if username and password match existing row in db. 
+     * @param account is an Account object with username and password.
+     * @return if successful, the Account object plus its account_id.
+     * @return if unsuccessful, null.
+    */
     public Account getAccountByUsernameAndPassword(Account account) {
         Account gotAccount = accountDAO.getAccountByUsernameAndPassword(account);
         // if null, it means the attempt from the DAO SQL query couldn't find an account with a matching username and password

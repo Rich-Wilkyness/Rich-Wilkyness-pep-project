@@ -27,7 +27,10 @@ public class AccountDAO {
     }
 */ 
 
-    /** takes username and password --> returns these and the new account_id */
+    /** creates a new account in the account table.
+     * @param newAccount is an Account object with username and password 
+     * @return if successful, the object with created account_id 
+     * @return if unsuccessful, null */
     public Account createAccount(Account newAccount) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -64,7 +67,12 @@ public class AccountDAO {
         return null;
     }
 
-    // this is for checking if an account exists before trying to create it
+    /**
+     * checks if an account exists by username in the account table.
+     * @param username this comes from an Account object
+     * @return if successfully, finds an existing user with given username, true
+     * @return if unsuccessful, false
+     */
     public boolean getAccountByUsername(String username) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;
@@ -95,6 +103,11 @@ public class AccountDAO {
         return false;
     }
     
+    /** Login for an account.
+     * @param account takes an Account object with username and password.
+     * @return if successful, finds a user with matching username and password, returns an Account object with account_id, username, and password.
+     * @return if unsuccessful, returns null.
+     */
     public Account getAccountByUsernameAndPassword(Account account) {
         Connection connection = ConnectionUtil.getConnection();
         PreparedStatement preparedStatement = null;

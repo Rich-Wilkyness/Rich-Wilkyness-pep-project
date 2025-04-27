@@ -30,24 +30,25 @@ public class MessageService {
     // -----------------------------------------------------------------------------------------------------------
     // SERVICES
 
-    // verify - message_text is not blank, is under 255 characters, posted_by refers to a real, existing user
+    /** verifies - message_text is not blank, is under 255 characters, posted_by refers to a real, existing user 
+     * @param createThisMessage is a Message object we want to create in the message table db.
+     * @return if successful, the created message with its' message_id.
+     * @return if unsuccessful, null.
+    */
     public Message createMessage(Message createThisMessage) {
         // check message_text is not blank and is under 255 characters (does this mean = to and under?)
         if (createThisMessage == null || createThisMessage.message_text.isBlank() || createThisMessage.message_text.length() > 255)
         {
             return null;
         }
-        System.out.println("Service, passed verify");
         // check if posted_by is an existing user --> need additional SQL call 
         // if user does not exist --> return null
         if (!postedByExistingUser(createThisMessage.posted_by)) {
             return null;
         }
-        System.out.println("Service, passed existing user");
         // if we made it here, verification is complete 
         // we now can create the message
         Message createdMessage = messageDAO.createMessage(createThisMessage);
-        System.out.println("Service, message returned from DAO");
         // not sure if this if statement is needed, but safe for now
         if (createdMessage != null) {
             return createdMessage;
@@ -55,27 +56,42 @@ public class MessageService {
         return null;
     }
 
-    /** determines if a user exists when they try and create a new message (createMessage) */
+    /** determines if a user exists.
+     * @param postedBy is the foreign key posted_by of a Message object for an account_id of an Account object.
+     * @return true if exists, else false.
+    */
     public boolean postedByExistingUser(int postedBy) {
         return messageDAO.postedByExistingUser(postedBy);
     }
 
-    // no verification needed
+    /** No verification.
+     * @return a list of all messages if any exist, empty list if none exist.
+     */
     public List<Message> getAllMessages() {
         return messageDAO.getAllMessages();
     }
 
-    // check if message exists?? - this will be done by the DAO - if null is returned the controller will handle the status code
+    /** No verification.
+     * @param id message_id.
+     * @return Message object or null.
+     */
     public Message getMessageById(int id) {
         return messageDAO.getMessageById(id);
     }
 
-    // check if message exists?? - this will be done by the DAO - if null is returned the controller will handle the status code
+    /** No verification.
+     * @param id message_id.
+     * @return Message object or null.
+     */
     public Message deleteMessageById(int id) {
         return messageDAO.deleteMessageById(id);
     }
 
-    // verify - first check if message_id exists and new message_text is not blank and is not over 255 characters 
+    /** verifies - checks if message_id exists and new message_text is not blank and is not over 255 characters 
+     * @param newMessage Message object with new message_text.
+     * @return if successful, an updated Message object with new text.
+     * @return if unsuccessful, null.
+    */
     public Message updateMessageById(Message newMessage) {
         // check null first or you will get a NullPointerException when trying to access an objects fields
         if (newMessage == null || newMessage.message_text == null || newMessage.message_text.isBlank() || newMessage.message_text.length() > 255) {
@@ -94,10 +110,11 @@ public class MessageService {
     // --------------------------------------------------------------------------------------------------------------
     // ACCOUNT 
 
-    // check if account exists? - doesn't look like i need to check
+    /** No verification.
+     * @param id account_id.
+     * @return a list of all messages created by an account or an empty list.
+     */
     public List<Message> getAllMessagesByAccountId(int id) {
-        System.out.println("service account ");
-
         return messageDAO.getAllMessagesByAccountId(id);
     }
 }
